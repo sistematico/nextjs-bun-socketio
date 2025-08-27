@@ -1,0 +1,28 @@
+- name: Alterar as unidades do systemd
+  ansible.builtin.copy:
+    src: etc/systemd/system/chat.lucasbrum.dev.service
+    dest: /etc/systemd/system/chat.lucasbrum.dev.service
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: >-
+    Habilitar o usuario nginx para rodar:
+    sudo /usr/bin/systemctl restart|stop|start|status chat.lucasbrum.dev,
+    sem necessidade de senha
+  community.general.sudoers:
+    name: chat-lucasbrum
+    user: nginx
+    commands:
+      - /usr/bin/systemctl stop chat.lucasbrum.dev.service
+      - /usr/bin/systemctl start chat.lucasbrum.dev.service
+      - /usr/bin/systemctl restart chat.lucasbrum.dev.service
+      - /usr/bin/systemctl status chat.lucasbrum.dev.service
+    nopassword: true
+
+- name: Reiniciar as unidades do systemd
+  ansible.builtin.systemd:
+    name: chat.lucasbrum.dev.service
+    state: restarted
+    enabled: true
+    daemon_reload: true

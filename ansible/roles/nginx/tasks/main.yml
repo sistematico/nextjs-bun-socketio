@@ -1,0 +1,29 @@
+- name: Install required packages
+  ansible.builtin.package:
+    name:
+      - nginx
+    state: present
+
+- name: Ensure group nginx exists
+  ansible.builtin.group:
+    name: nginx
+    state: present
+
+- name: Creates /etc/nginx/sites.d directory
+  ansible.builtin.file:
+    path: /etc/nginx/sites.d
+    state: directory
+    mode: "0755"
+
+- name: Configure /etc/nginx/sites.d/ files
+  ansible.builtin.template:
+    src: files/etc/nginx/sites.d/10-chat.lucasbrum.dev.conf
+    dest: /etc/nginx/sites.d/10-chat.lucasbrum.dev.conf
+    mode: "0644"
+    force: true
+
+- name: Restart nginx
+  ansible.builtin.service:
+    name: nginx
+    state: restarted
+    enabled: true

@@ -5,7 +5,10 @@ import { Server } from "socket.io";
 const dev = process.env.NODE_ENV !== "production";
 const hostname = dev ? "localhost" : "chat.lucasbrum.dev";
 const port = dev ? 3000 : 3030;
-// when using middleware `hostname` and `port` must be provided below
+
+// Silencia warnings do async_hooks
+process.removeAllListeners('warning');
+
 const app = next({ dev, hostname, port, turbo: dev });
 const handler = app.getRequestHandler();
 

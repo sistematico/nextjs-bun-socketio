@@ -29,8 +29,20 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## References
+
+- [Next.js](https://nextjs.org/)
+  - [Next.js Documentation](https://nextjs.org/docs)
+  - [Next.js Custom Server](https://nextjs.org/docs/app/guides/custom-server)
+- [Socket.io Next.js Example](https://socket.io/pt-br/how-to/use-with-nextjs)
+- [Pedro Alonso](https://www.pedroalonso.net/)
+  - [WebSockets with Next.js Part 1: Basics and Setup](https://www.pedroalonso.net/blog/websockets-nextjs-part-1/)
+  - [WebSockets with Next.js Part 2: Real-Time Chat](https://www.pedroalonso.net/blog/websockets-nextjs-part-2/)
+  - [WebSockets with Next.js Part 3: Advanced Concepts and Best Practices](https://www.pedroalonso.net/blog/websockets-nextjs-part-3/)
+
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+

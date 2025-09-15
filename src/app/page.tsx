@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { socket } from "@/lib/socket";
+import { Chat } from "@/components/Chat";
 
 export default function Home() {
   const [isConnected, setIsConnected] = useState(false);
@@ -39,6 +40,7 @@ export default function Home() {
     <div>
       <p>Status: { isConnected ? "connected" : "disconnected" }</p>
       <p>Transport: { transport }</p>
+      <Chat />
     </div>
   );
 }

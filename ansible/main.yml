@@ -2,7 +2,8 @@
 - name: Executa múltiplas roles
   hosts: all
   gather_facts: true
-  become: yes
+  become: true
+  become_user: root
 
   roles:
     - nginx

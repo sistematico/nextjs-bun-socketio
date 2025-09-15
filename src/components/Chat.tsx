@@ -17,11 +17,24 @@ const initialMessages: Message[] = [];
 export const Chat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   // Gera um id único para o cliente
-  const clientIdRef = useRef<string>("cli-" + Math.random().toString(36).slice(2));
+  // Persistência do id do cliente
+  const getClientId = () => {
+    if (typeof window !== "undefined") {
+      let id = localStorage.getItem("chat-client-id");
+      if (!id) {
+        id = "cli-" + Math.random().toString(36).slice(2);
+        localStorage.setItem("chat-client-id", id);
+      }
+      return id;
+    }
+    return "cli-server";
+  };
+  const clientIdRef = useRef<string>(getClientId());
 
   useEffect(() => {
     // Escuta mensagens do servidor
     const handleMessage = (msgObj: { id: string; text: string }) => {
+      console.log("[RECEIVED]", msgObj, "Meu id:", clientIdRef.current);
       setMessages((prev) => [
         ...prev,
         {
@@ -44,21 +57,23 @@ export const Chat: React.FC = () => {
   }, []);
 
   const handleSend = (text: string) => {
-    // Envia para o servidor
+    console.log("[SEND]", { id: clientIdRef.current, text });
     socket.emit("message", { id: clientIdRef.current, text });
   };
 
   return (
-    <div style={{
-      width: 400,
-      height: 600,
-      display: 'flex',
-      flexDirection: 'column',
-      borderRadius: '8px',
-      boxShadow: '0 2px 12px rgba(0,0,0,0.12)',
-      overflow: 'hidden',
-      background: '#ece5dd',
-    }}>
+    <div
+      style={{
+        width: '100vw',
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        borderRadius: 0,
+        boxShadow: 'none',
+        overflow: 'hidden',
+        background: '#ece5dd',
+      }}
+    >
       <ChatHeader contactName="Contato" avatarUrl="/window.svg" />
       <ChatMessages messages={messages} />
       <ChatInput onSend={handleSend} />

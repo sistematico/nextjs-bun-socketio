@@ -24,11 +24,15 @@ app.prepare().then(() => {
   io.on("connection", (socket) => {
     console.log("Client connected");
 
-    socket.on("message", (msg) => {
-      console.log("Message received:", msg);
-    });
+      // Recebe objeto de mensagem do cliente e retransmite para todos
+      socket.on("message", (msgObj) => {
+        console.log("Message received:", msgObj);
+        // Envia para todos os clientes, incluindo quem enviou
+        io.emit("message", msgObj);
+      });
 
-    socket.emit("message", "Hello from server");
+      // Mensagem de boas-vindas apenas para o cliente conectado
+      socket.emit("message", { id: "server", text: "Bem-vindo ao chat!" });
 
     socket.on("disconnect", () => {
       console.log("Client disconnected");

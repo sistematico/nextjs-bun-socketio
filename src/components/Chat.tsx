@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { socket } from "@/lib/socket";
 import ChatHeader from './ChatHeader';
 import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
@@ -6,28 +7,45 @@ import ChatInput from './ChatInput';
 type Message = {
   id: string;
   text: string;
-  author: "me" | "other";
+  author: "me" | "other" | "server";
   time: string;
 };
 
-const initialMessages: Message[] = [
-  { id: '1', text: 'Olá! 👋', author: 'other', time: '09:00' },
-  { id: '2', text: 'Oi! Tudo bem?', author: 'me', time: '09:01' },
-];
+const initialMessages: Message[] = [];
+
 
 export const Chat: React.FC = () => {
-  const [messages, setMessages] = useState(initialMessages);
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  // Gera um id único para o cliente
+  const clientIdRef = useRef<string>("cli-" + Math.random().toString(36).slice(2));
+
+  useEffect(() => {
+    // Escuta mensagens do servidor
+    const handleMessage = (msgObj: { id: string; text: string }) => {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: String(Date.now()),
+          text: msgObj.text,
+          author:
+            msgObj.id === clientIdRef.current
+              ? "me"
+              : msgObj.id === "server"
+              ? "server"
+              : "other",
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        },
+      ]);
+    };
+    socket.on("message", handleMessage);
+    return () => {
+      socket.off("message", handleMessage);
+    };
+  }, []);
 
   const handleSend = (text: string) => {
-    setMessages([
-      ...messages,
-      {
-        id: String(messages.length + 1),
-        text,
-        author: 'me',
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      },
-    ]);
+    // Envia para o servidor
+    socket.emit("message", { id: clientIdRef.current, text });
   };
 
   return (

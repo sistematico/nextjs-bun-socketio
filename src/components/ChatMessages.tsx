@@ -3,7 +3,7 @@ import React from 'react';
 interface Message {
   id: string;
   text: string;
-  author: 'me' | 'other';
+  author: 'me' | 'other' | 'server';
   time: string;
 }
 
@@ -27,7 +27,7 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({ messages }) => (
         style={{
           alignSelf: msg.author === 'me' ? 'flex-end' : 'flex-start',
           maxWidth: '70%',
-          background: msg.author === 'me' ? '#dcf8c6' : 'white',
+          background: msg.author === 'me' ? '#dcf8c6' : msg.author === 'server' ? '#ffeeba' : 'white',
           color: '#222',
           borderRadius: '8px',
           padding: '8px 12px',
